@@ -48,7 +48,7 @@ function VoltWiseSummary({ data, isLoading, error, view }: VoltWiseSummaryProps)
     return (
       <section className="card p-6">
         <h2 className="mb-3 text-base font-semibold tracking-tight text-[var(--text-primary)]">Renewable Mix</h2>
-        <div className="h-[300px]">
+        <div className="h-[361.5px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Tooltip

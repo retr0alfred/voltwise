@@ -25,7 +25,7 @@ const teamMembers: TeamMember[] = [
   },
   {
     name: "Sushree Sonali Patra",
-    role: "Backend and Model Integration",
+    role: "Backend and Agent Integration",
     accent: "var(--pastel-lavender)",
   },
 ];
