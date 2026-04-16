@@ -6,6 +6,21 @@ Team: Luminaries | Hackathon: Cognizant Technoverse 2026
 ---
 
 ---
+## [RUN 4] - 2026-04-16 22:22:36
+**Changes made:**
+- Created root documentation file `README.md` with project overview, tech stack, setup, structure, datasets, and current status.
+- Updated `VOLTWISE_DEV_LOG.md` with this run entry.
+
+**Status:**
+- Frontend: Working and documented with clear run/build instructions.
+- Backend: Empty scaffold retained for future implementation.
+- Data: CSV files remain in `frontend/public/data/` and are documented in README.
+
+**Next steps / TODOs:**
+- Add backend setup and API contracts to README once prediction services are implemented.
+---
+
+---
 
 ## [RUN 3] - 2026-04-16 22:09:50
 
