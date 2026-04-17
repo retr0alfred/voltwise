@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --pastel-green: #84a59d;
+  --pastel-blue: #7b9eaf;
+  --pastel-yellow: #e2c044;
+  --pastel-lavender: #b5a6c9;
+  --bg-light: #f7f5f0;
+  --bg-card: #ffffff;
+  --border-soft: #dcd7ce;
+  --text-primary: #2c2c2c;
+  --text-muted: #686868;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --pastel-green: #89b7ac;
+  --pastel-blue: #93b6c8;
+  --pastel-yellow: #d1b24d;
+  --pastel-lavender: #b8a8d4;
+  --bg-light: #111418;
+  --bg-card: #1a2026;
+  --border-soft: #2f3841;
+  --text-primary: #e8edf2;
+  --text-muted: #a1acb7;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html,
+body {
+  margin: 0;
+  background-color: var(--bg-light);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  font-family: "Space Grotesk", sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg-light);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--border-soft);
+  border-radius: 999px;
+}
+
+.data-mono {
+  font-family: "JetBrains Mono", monospace;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+}
+
+.interactive-lift {
+  transition: all 0.2s ease-in-out;
+}
+
+.interactive-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.06);
+}
+
+.chart-shell {
+  overflow-x: auto;
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.recharts-text,
+.recharts-legend-item-text,
+.recharts-tooltip-wrapper,
+.recharts-default-tooltip {
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text-primary);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
