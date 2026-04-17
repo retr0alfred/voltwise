@@ -1,6 +1,140 @@
 import pandas as pd
 import numpy as np
 
+DAM_FEATURES = [
+    "mcp_lag96", "mcp_lag192", "mcp_lag288", "mcp_lag672", "mcp_lag1344",
+    "mcp_ma96", "mcp_ma192", "mcp_ma672",
+    "mcp_rollstd96", "mcp_rollstd192",
+    "mcp_pct_rank", "is_spike", "price_vs_week",
+    "demand_lag96", "demand_lag192", "demand_lag672",
+    "demand_ma96", "demand_ma672", "demand_growth_1d",
+    "hour_sin", "hour_cos",
+    "month_sin", "month_cos",
+    "dow_sin", "dow_cos",
+    "hour_dow",
+    "national_discomfort", "avg_temp",
+    "solar_proxy", "wind_proxy",
+]
+
+def create_dam_features(data, mcp_history=None, demand_history=None):
+    """
+    Create DAM-specific features (30 features for T+24hr prediction).
+    
+    Args:
+        data: Input data dict or list of dicts
+        mcp_history: Deque of historical MCP values for lag features
+        demand_history: Deque of historical demand values for lag features
+    
+    Returns:
+        DataFrame with 30 DAM features in correct order
+    """
+    if isinstance(data, list):
+        df = pd.DataFrame(data)
+    else:
+        df = pd.DataFrame([data])
+
+    # Extract basic values
+    mcp = df['mcp'].iloc[0]
+    demand = df['demand_national'].iloc[0]
+    hour = df['hour'].iloc[0]
+    month = df['month'].iloc[0]
+    dow = df['day_of_week'].iloc[0]
+
+    # MCP lag features (use history if available, otherwise fallback)
+    if mcp_history and len(mcp_history) >= 1:
+        mcp_lag96 = mcp_history[-1] if len(mcp_history) >= 96 else mcp * 0.90
+        mcp_lag192 = mcp_history[-1] if len(mcp_history) >= 192 else mcp * 0.88
+        mcp_lag288 = mcp_history[-1] if len(mcp_history) >= 288 else mcp * 0.86
+        mcp_lag672 = mcp_history[-1] if len(mcp_history) >= 672 else mcp * 0.85
+        mcp_lag1344 = mcp_history[-1] if len(mcp_history) >= 1344 else mcp * 0.82
+    else:
+        mcp_lag96 = mcp * 0.90
+        mcp_lag192 = mcp * 0.88
+        mcp_lag288 = mcp * 0.86
+        mcp_lag672 = mcp * 0.85
+        mcp_lag1344 = mcp * 0.82
+
+    df['mcp_lag96'] = mcp_lag96
+    df['mcp_lag192'] = mcp_lag192
+    df['mcp_lag288'] = mcp_lag288
+    df['mcp_lag672'] = mcp_lag672
+    df['mcp_lag1344'] = mcp_lag1344
+
+    # MCP moving averages
+    df['mcp_ma96'] = mcp * 0.94
+    df['mcp_ma192'] = mcp * 0.92
+    df['mcp_ma672'] = mcp * 0.90
+
+    # MCP rolling std
+    df['mcp_rollstd96'] = mcp * 0.08
+    df['mcp_rollstd192'] = mcp * 0.10
+
+    # Price regime features
+    df['mcp_pct_rank'] = 0.5  # Default middle rank
+    df['is_spike'] = int(mcp > mcp * 1.5 * 0.94)  # Based on mcp_ma96
+    df['price_vs_week'] = mcp_lag96 / (mcp * 0.90 + 1)
+
+    # Demand lag features
+    if demand_history and len(demand_history) >= 1:
+        demand_lag96 = demand_history[-1] if len(demand_history) >= 96 else demand * 0.92
+        demand_lag192 = demand_history[-1] if len(demand_history) >= 192 else demand * 0.90
+        demand_lag672 = demand_history[-1] if len(demand_history) >= 672 else demand * 0.88
+    else:
+        demand_lag96 = demand * 0.92
+        demand_lag192 = demand * 0.90
+        demand_lag672 = demand * 0.88
+
+    df['demand_lag96'] = demand_lag96
+    df['demand_lag192'] = demand_lag192
+    df['demand_lag672'] = demand_lag672
+
+    # Demand moving averages
+    df['demand_ma96'] = demand * 0.95
+    df['demand_ma672'] = demand * 0.90
+
+    # Demand growth
+    df['demand_growth_1d'] = (demand * 0.95 / (demand * 0.95) - 1) * 0.02  # Small growth
+
+    # Cyclical time encoding
+    df['hour_sin'] = np.sin(2 * np.pi * hour / 24)
+    df['hour_cos'] = np.cos(2 * np.pi * hour / 24)
+    df['month_sin'] = np.sin(2 * np.pi * month / 12)
+    df['month_cos'] = np.cos(2 * np.pi * month / 12)
+    df['dow_sin'] = np.sin(2 * np.pi * dow / 7)
+    df['dow_cos'] = np.cos(2 * np.pi * dow / 7)
+
+    # Hour × DoW interaction
+    df['hour_dow'] = hour * 7 + dow
+
+    # Weather composite features
+    df['national_discomfort'] = (
+        (df['delhi_temp'] * df['delhi_humidity'] / 100) * 0.25 +
+        (df['mumbai_temp'] * df['mumbai_humidity'] / 100) * 0.20 +
+        (df['kolkata_temp'] * df['kolkata_humidity'] / 100) * 0.20 +
+        (df['chennai_temp'] * df['chennai_humidity'] / 100) * 0.20 +
+        (df['guwahati_temp'] * df['guwahati_humidity'] / 100) * 0.15
+    )
+    df['avg_temp'] = (
+        df['delhi_temp'] * 0.25 + df['mumbai_temp'] * 0.20 +
+        df['kolkata_temp'] * 0.20 + df['chennai_temp'] * 0.20 +
+        df['guwahati_temp'] * 0.15
+    )
+
+    # Renewable proxy features
+    df['solar_proxy'] = np.maximum(0, np.sin(2 * np.pi * hour / 24)) * (
+        df['delhi_temp']*0.25 + df['mumbai_temp']*0.20 + df['kolkata_temp']*0.20 + 
+        df['chennai_temp']*0.20 + df['guwahati_temp']*0.15
+    ) / 30
+    df['wind_proxy'] = (
+        df['delhi_humidity']*0.25 + df['mumbai_humidity']*0.20 + df['kolkata_humidity']*0.20 + 
+        df['chennai_humidity']*0.20 + df['guwahati_humidity']*0.15
+    ) / 100 * 15
+
+    # Select only the 30 DAM features in correct order
+    df = df[DAM_FEATURES]
+
+    return df
+
 def create_features(data):
     if isinstance(data, list):
         df = pd.DataFrame(data)

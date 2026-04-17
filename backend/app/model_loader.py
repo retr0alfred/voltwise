@@ -9,8 +9,11 @@ model = None
 models = {
     "t1": None,  # 15min model
     "t4": None,  # 1hr model (4 * 15min)
-    "t8": None   # 2hr model (8 * 15min)
+    "t8": None,  # 2hr model (8 * 15min)
 }
+
+# DAM model for day-ahead market prediction (24hr ahead)
+dam_model = None
 
 def load_model():
     """Load single 15min model for backward compatibility"""
@@ -66,3 +69,25 @@ def is_model_loaded():
 def are_models_loaded():
     """Check if all three models are loaded and ready for prediction"""
     return all(m is not None and hasattr(m, 'predict') for m in models.values())
+
+def load_dam_model():
+    """Load DAM model for day-ahead market prediction"""
+    global dam_model
+    try:
+        models_dir = Path(__file__).parent.parent / "models"
+        dam_model = joblib.load(models_dir / "xgb_dam_T24hr.pkl")
+        
+        if dam_model is None:
+            raise ValueError("DAM model is None after loading")
+        if not hasattr(dam_model, 'predict'):
+            raise ValueError("DAM model does not have predict method")
+        
+        print(f"DAM model loaded successfully: {type(dam_model)}")
+        return True
+    except Exception as e:
+        print(f"Error loading DAM model: {e}")
+        raise
+
+def is_dam_model_loaded():
+    """Check if DAM model is loaded and ready for prediction"""
+    return dam_model is not None and hasattr(dam_model, 'predict')

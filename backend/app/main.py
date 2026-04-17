@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from pathlib import Path
-from app.schemas import InputData, BatchInput, SimulationRequest
+from app.schemas import InputData, BatchInput, SimulationRequest, DAMSimulationRequest
 from app.features import create_features
 from app import model_loader
 from app.simulator import simulator
+from app.dam_simulator import dam_simulator
 
 app = FastAPI()
 
@@ -23,6 +24,13 @@ def startup():
             print("All models verified and ready for multi-model predictions")
         else:
             print("Warning: Multi-model loading verification failed")
+        
+        # Load DAM model for day-ahead market predictions
+        model_loader.load_dam_model()
+        if model_loader.is_dam_model_loaded():
+            print("DAM model verified and ready for day-ahead predictions")
+        else:
+            print("Warning: DAM model loading verification failed")
     except Exception as e:
         print(f"Failed to load models during startup: {e}")
         raise
@@ -174,4 +182,66 @@ def stop_simulation():
         "message": "Simulation stopped",
         "status": "stopped",
         "total_processed": len(simulator.results)
+    }
+
+def run_dam_simulation_task(speed: float, limit: int):
+    """Background task to run DAM simulation."""
+    try:
+        csv_path = Path(__file__).parent.parent / "data" / "voltwise_final.csv"
+        output_path = Path(__file__).parent.parent / "data" / "dam_simulation_output.csv"
+        
+        summary = dam_simulator.run_simulation(
+            csv_path=csv_path,
+            speed=speed,
+            limit=limit,
+            output_path=output_path
+        )
+        
+        print(f"DAM simulation completed: {summary}")
+    except Exception as e:
+        print(f"DAM simulation failed: {e}")
+
+@app.post("/simulate-dam")
+def start_dam_simulation(request: DAMSimulationRequest, background_tasks: BackgroundTasks):
+    """Start day-ahead market simulation in background."""
+    # Check if DAM model is loaded
+    if not model_loader.is_dam_model_loaded():
+        raise HTTPException(status_code=503, detail="DAM model not loaded or unavailable")
+    
+    # Check if DAM simulation is already running
+    if dam_simulator.is_running:
+        raise HTTPException(status_code=409, detail="DAM simulation already in progress")
+    
+    # Add background task
+    background_tasks.add_task(run_dam_simulation_task, request.speed, request.limit)
+    
+    return {
+        "message": "DAM simulation started in background",
+        "speed": request.speed,
+        "limit": request.limit,
+        "status": "running"
+    }
+
+@app.post("/stop-dam-simulation")
+def stop_dam_simulation():
+    """Stop the running DAM simulation."""
+    if not dam_simulator.is_running:
+        raise HTTPException(status_code=409, detail="No DAM simulation is currently running")
+    
+    dam_simulator.stop()
+    
+    return {
+        "message": "DAM simulation stopped",
+        "status": "stopped",
+        "total_processed": len(dam_simulator.results)
+    }
+
+@app.get("/dam-live-data")
+def get_dam_live_data():
+    """Get latest streaming results from DAM live buffer."""
+    return {
+        "data": list(dam_simulator.live_buffer),
+        "is_running": dam_simulator.is_running,
+        "current_index": dam_simulator.current_index,
+        "total_processed": len(dam_simulator.results)
     }

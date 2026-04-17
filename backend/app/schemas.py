@@ -37,3 +37,7 @@ class BatchInput(BaseModel):
 class SimulationRequest(BaseModel):
     speed: float = 1.0
     limit: Optional[int] = None
+
+class DAMSimulationRequest(BaseModel):
+    speed: float = 1.0
+    limit: Optional[int] = None
