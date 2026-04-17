@@ -1,4 +1,8 @@
-import { LiveDataResponse, SimulationControlPayload } from "../types/predictions";
+import {
+  DAMLiveDataResponse,
+  LiveDataResponse,
+  SimulationControlPayload,
+} from "../types/predictions";
 
 interface ApiErrorResponse {
   detail?: string;
@@ -53,5 +57,19 @@ export const startSimulation = (payload: SimulationControlPayload): Promise<unkn
 
 export const stopSimulation = (): Promise<unknown> =>
   apiRequest<unknown>("/stop-simulation", {
+    method: "POST",
+  });
+
+export const getDamLiveData = (): Promise<DAMLiveDataResponse> =>
+  apiRequest<DAMLiveDataResponse>("/dam-live-data");
+
+export const startDamSimulation = (payload: SimulationControlPayload): Promise<unknown> =>
+  apiRequest<unknown>("/simulate-dam", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const stopDamSimulation = (): Promise<unknown> =>
+  apiRequest<unknown>("/stop-dam-simulation", {
     method: "POST",
   });

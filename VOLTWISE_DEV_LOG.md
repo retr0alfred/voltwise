@@ -7,6 +7,37 @@ Team: Luminaries | Hackathon: Cognizant Technoverse 2026
 
 ---
 
+## [RUN 7] - 2026-04-17 15:05:18
+
+**Changes made:**
+
+- Integrated newly added DAM backend stream endpoints into frontend API layer:
+  - `GET /dam-live-data`
+  - `POST /simulate-dam`
+  - `POST /stop-dam-simulation`
+- Extended prediction typing contracts in `frontend/src/types/predictions.ts` with DAM live data models.
+- Redesigned `frontend/src/pages/Predictions.tsx` into two clearly separate sections (no mixing):
+  - Section 1: Existing intraday stream (`/live-data`) with current controls/cards/charts/table.
+  - Section 2: New DAM stream (`/dam-live-data`) with independent controls, status, KPI cards, dedicated trend chart, and recent DAM predictions table.
+- Added independent loading/error/submission states and polling flow for DAM stream.
+- Added `backend/data/dam_simulation_output.csv` to `.gitignore` to reduce generated-data git noise.
+- Rebuilt frontend successfully after the split-page integration.
+
+**Status:**
+
+- Frontend: Predictions page now contains two standalone model consoles matching existing VoltWise visual aesthetic.
+- Backend: Existing intraday and new DAM simulation endpoints both wired on frontend.
+- Data: DAM output fields (`predicted_dam_price`, `actual_dam_price`, `error`, `abs_error`, `correct_prediction`) are rendered directly from backend response.
+
+**Next steps / TODOs:**
+
+- Optional: add endpoint health badges for intraday and DAM streams.
+- Optional: add separate configurable polling intervals per section.
+
+---
+
+---
+
 ## [RUN 6] - 2026-04-17 13:13:28
 
 **Changes made:**

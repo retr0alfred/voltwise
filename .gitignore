@@ -57,6 +57,7 @@ ENV/
 
 # Backend generated runtime outputs
 backend/data/simulation_output.csv
+backend/data/dam_simulation_output.csv
 
 # Temporary files
 *.tmp
