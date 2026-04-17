@@ -6,8 +6,45 @@ Team: Luminaries | Hackathon: Cognizant Technoverse 2026
 ---
 
 ---
-## [RUN 5] - 2026-04-17 09:04:30
+
+## [RUN 6] - 2026-04-17 13:13:28
+
 **Changes made:**
+
+- Installed backend runtime dependencies in the project virtual environment:
+  - `fastapi`, `uvicorn`, `pandas`, `numpy`, `joblib`, `shap`, `xgboost`, `scikit-learn`
+- Added backend dependency lock file: `backend/requirements.txt`.
+- Replaced predictions placeholder with full live backend-integrated page in `frontend/src/pages/Predictions.tsx`:
+  - Polling and rendering of `/live-data`
+  - Simulation controls wired to `/simulate` and `/stop-simulation`
+  - Live decision card, confidence, metrics, trend chart, SHAP top feature list, and recent predictions table
+  - Robust loading and error state handling
+- Added typed backend API integration files:
+  - `frontend/src/types/predictions.ts`
+  - `frontend/src/services/predictionsApi.ts`
+- Added frontend dev proxy for backend API in `frontend/vite.config.ts` (`/api` -> `http://127.0.0.1:8000`).
+- Verified frontend build succeeds and backend app imports/routes load correctly.
+- Removed only generated cache artifacts from this run under `backend/app/__pycache__/` per request.
+
+**Status:**
+
+- Frontend: Predictions page now backend-driven with live stream visualization and simulation controls.
+- Backend: Dependencies installed; API endpoints reachable with FastAPI app loaded.
+- Data: Existing dashboard CSV data pipeline unchanged.
+
+**Next steps / TODOs:**
+
+- Add optional auto-refresh toggle and polling interval control in Predictions UI.
+- Add API health indicator badge and reconnect backoff behavior.
+
+---
+
+---
+
+## [RUN 5] - 2026-04-17 09:04:30
+
+**Changes made:**
+
 - Added global theme provider: `frontend/src/context/ThemeContext.tsx`.
 - Wrapped app with theme provider in `frontend/src/main.tsx`.
 - Added light/dark mode toggle controls in `frontend/src/components/Navbar.tsx` (desktop and mobile).
@@ -22,13 +59,16 @@ Team: Luminaries | Hackathon: Cognizant Technoverse 2026
 - Rebuilt frontend successfully after theme integration.
 
 **Status:**
+
 - Frontend: Global light/dark mode is now synchronized across all routes and persists via local storage.
 - Backend: Placeholder scaffold only.
 - Data: CSV pipeline unchanged and functioning.
 
 **Next steps / TODOs:**
+
 - Optionally add a default-theme preference selector (light/dark/system).
 - Optionally extend theme tokenization for chart stroke/fill variants in dark mode.
+
 ---
 
 ---
