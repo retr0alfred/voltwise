@@ -93,7 +93,7 @@ function WeatherChart({ data, isLoading, error }: WeatherChartProps): JSX.Elemen
                 contentStyle={{
                   border: "1px solid var(--border-soft)",
                   borderRadius: 8,
-                  backgroundColor: "#ffffff",
+                  backgroundColor: "var(--bg-card)",
                 }}
                 formatter={(value: number | string, name: string) => {
                   const numeric = Number(value);

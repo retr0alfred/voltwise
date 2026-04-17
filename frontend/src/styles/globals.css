@@ -5,6 +5,7 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light;
   --pastel-green: #84a59d;
   --pastel-blue: #7b9eaf;
   --pastel-yellow: #e2c044;
@@ -14,6 +15,19 @@
   --border-soft: #dcd7ce;
   --text-primary: #2c2c2c;
   --text-muted: #686868;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --pastel-green: #89b7ac;
+  --pastel-blue: #93b6c8;
+  --pastel-yellow: #d1b24d;
+  --pastel-lavender: #b8a8d4;
+  --bg-light: #111418;
+  --bg-card: #1a2026;
+  --border-soft: #2f3841;
+  --text-primary: #e8edf2;
+  --text-muted: #a1acb7;
 }
 
 html,
@@ -27,6 +41,7 @@ body {
   margin: 0;
   background-color: var(--bg-light);
   color: var(--text-primary);
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   font-family: "Space Grotesk", sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;

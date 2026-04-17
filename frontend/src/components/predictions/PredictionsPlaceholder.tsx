@@ -4,7 +4,7 @@ function PredictionsPlaceholder(): JSX.Element {
   return (
     <section className="card fade-in flex min-h-[60vh] items-center justify-center p-8">
       <div className="w-full max-w-2xl rounded-xl border border-[var(--border-soft)] bg-gradient-to-b from-[rgba(123,158,175,0.14)] via-[rgba(181,166,201,0.1)] to-transparent px-8 py-14 text-center">
-        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--border-soft)] bg-white">
+        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)]">
           <Target className="h-7 w-7 text-[var(--pastel-blue)]" aria-hidden="true" />
         </div>
         <h1 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)]">Predictions Engine</h1>

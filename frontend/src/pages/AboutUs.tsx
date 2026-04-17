@@ -41,7 +41,7 @@ function AboutUs(): JSX.Element {
         <p className="mt-2 text-sm text-[var(--text-muted)]">
           AI-Driven Energy Trading Intelligence for Indian Power Markets
         </p>
-        <span className="mt-4 inline-block rounded-full border border-[var(--border-soft)] bg-white px-3 py-1 text-xs text-[var(--text-primary)]">
+        <span className="mt-4 inline-block rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-1 text-xs text-[var(--text-primary)]">
           Cognizant Technoverse 2026 · Team Luminaries
         </span>
       </section>

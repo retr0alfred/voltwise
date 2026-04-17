@@ -42,7 +42,7 @@ function DemandChart({ data, isLoading, error }: DemandChartProps): JSX.Element 
           <select
             value={selectedRegion}
             onChange={(event) => setSelectedRegion(event.target.value as RegionSelection)}
-            className="interactive-lift rounded-md border border-[var(--border-soft)] bg-white px-2 py-1 text-sm text-[var(--text-primary)]"
+            className="interactive-lift rounded-md border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-1 text-sm text-[var(--text-primary)]"
           >
             <option value="north">North</option>
             <option value="west">West</option>
@@ -72,7 +72,7 @@ function DemandChart({ data, isLoading, error }: DemandChartProps): JSX.Element 
                 contentStyle={{
                   border: "1px solid var(--border-soft)",
                   borderRadius: 8,
-                  backgroundColor: "#ffffff",
+                  backgroundColor: "var(--bg-card)",
                 }}
                 content={({ active, payload }) => {
                   if (!active || !payload || payload.length === 0) {
@@ -82,7 +82,7 @@ function DemandChart({ data, isLoading, error }: DemandChartProps): JSX.Element 
                   const row = payload[0].payload as DemandPoint;
 
                   return (
-                    <div className="rounded-lg border border-[var(--border-soft)] bg-white p-3 text-xs">
+                    <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] p-3 text-xs">
                       <p className="mb-2 text-[var(--text-primary)]">{row.datetime}</p>
                       <p>National: {formatNumber(row.national)} MW</p>
                       <p>North: {formatNumber(row.north)} MW</p>

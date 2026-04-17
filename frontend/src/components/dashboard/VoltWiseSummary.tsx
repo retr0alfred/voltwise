@@ -55,7 +55,7 @@ function VoltWiseSummary({ data, isLoading, error, view }: VoltWiseSummaryProps)
                 contentStyle={{
                   border: "1px solid var(--border-soft)",
                   borderRadius: 8,
-                  backgroundColor: "#ffffff",
+                  backgroundColor: "var(--bg-card)",
                 }}
                 formatter={(value: number | string) => [`${formatNumber(Number(value), 2)}%`, "Value"]}
               />
@@ -99,7 +99,7 @@ function VoltWiseSummary({ data, isLoading, error, view }: VoltWiseSummaryProps)
                 contentStyle={{
                   border: "1px solid var(--border-soft)",
                   borderRadius: 8,
-                  backgroundColor: "#ffffff",
+                  backgroundColor: "var(--bg-card)",
                 }}
                 formatter={(value: number | string, name: string) => {
                   const labels: Record<string, string> = {

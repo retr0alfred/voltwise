@@ -62,7 +62,7 @@ function IEXChart({ data, isLoading, error }: IEXChartProps): JSX.Element {
                 contentStyle={{
                   border: "1px solid var(--border-soft)",
                   borderRadius: 8,
-                  backgroundColor: "#ffffff",
+                  backgroundColor: "var(--bg-card)",
                 }}
                 content={({ active, payload }) => {
                   if (!active || !payload || payload.length === 0) {
@@ -72,7 +72,7 @@ function IEXChart({ data, isLoading, error }: IEXChartProps): JSX.Element {
                   const row = payload[0].payload as IEXPoint;
 
                   return (
-                    <div className="rounded-lg border border-[var(--border-soft)] bg-white p-3 text-xs">
+                    <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] p-3 text-xs">
                       <p className="mb-2 text-[var(--text-primary)]">Date: {row.timestamp}</p>
                       <p>MCP: {formatCurrency(row.mcp)} Rs/MWh</p>
                       <p>Weighted MCP: {formatCurrency(row.weightedMcp)} Rs/MWh</p>

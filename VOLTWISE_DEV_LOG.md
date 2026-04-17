@@ -6,6 +6,32 @@ Team: Luminaries | Hackathon: Cognizant Technoverse 2026
 ---
 
 ---
+## [RUN 5] - 2026-04-17 09:04:30
+**Changes made:**
+- Added global theme provider: `frontend/src/context/ThemeContext.tsx`.
+- Wrapped app with theme provider in `frontend/src/main.tsx`.
+- Added light/dark mode toggle controls in `frontend/src/components/Navbar.tsx` (desktop and mobile).
+- Added dark theme variable overrides and theme transitions in `frontend/src/styles/globals.css`.
+- Updated theme-aware backgrounds in:
+  - `frontend/src/pages/AboutUs.tsx`
+  - `frontend/src/components/predictions/PredictionsPlaceholder.tsx`
+  - `frontend/src/components/dashboard/DemandChart.tsx`
+  - `frontend/src/components/dashboard/IEXChart.tsx`
+  - `frontend/src/components/dashboard/WeatherChart.tsx`
+  - `frontend/src/components/dashboard/VoltWiseSummary.tsx`
+- Rebuilt frontend successfully after theme integration.
+
+**Status:**
+- Frontend: Global light/dark mode is now synchronized across all routes and persists via local storage.
+- Backend: Placeholder scaffold only.
+- Data: CSV pipeline unchanged and functioning.
+
+**Next steps / TODOs:**
+- Optionally add a default-theme preference selector (light/dark/system).
+- Optionally extend theme tokenization for chart stroke/fill variants in dark mode.
+---
+
+---
 
 ## [RUN 4] - 2026-04-16 22:22:36
 
